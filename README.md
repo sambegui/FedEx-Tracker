@@ -1,4 +1,4 @@
-# FedEx Tracker
+# FedEx Sheet Tracker
 This is a Google Apps Script that checks the latest tracking status for tracking numbers using the FedEx API. The tracking numbers are stored in a Google Sheet, and the script retrieves the tracking details for each number and writes the results to the sheet.
 
 ## Sheet Requirments
