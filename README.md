@@ -1,6 +1,15 @@
 # FedEx Tracker
 This is a Google Apps Script that checks the latest tracking status for tracking numbers using the FedEx API. The tracking numbers are stored in a Google Sheet, and the script retrieves the tracking details for each number and writes the results to the sheet.
 
+## Sheet Requirments
+This script assumes that you have a Google Sheet with the following requirements:
+
+1. A sheet named "FedEx Tracker" exists in the Google Sheet.
+2. The first column of the "FedEx Tracker" sheet contains the tracking numbers.
+3. The second column of the "FedEx Tracker" sheet contains the tracking status, which can be either "In Transit", "Delivered", or empty.
+4. A sheet named "Logs" exists in the Google Sheet to store the API responses and delivered count.
+Make sure that your Google Sheet meets these requirements before running the script.
+
 ## Usage
 To use this script:
 
