@@ -15,8 +15,8 @@ To use this script:
 
 You can also set up a trigger to run the script automatically by calling the `setRefreshTriggerFedEx` function. This will create a time-based trigger that runs the script every 12 hours.
 
-## Credits
-This script was created by Samuel Beguiristain.
-
 ## Example
 ![SCR-20230227-2og](https://user-images.githubusercontent.com/125210256/221495339-7ec38cfa-6b51-4711-b69a-e04329aa176d.png)
+
+## Credits
+This script was created by Samuel Beguiristain.
