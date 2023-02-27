@@ -1,13 +1,14 @@
 /** 
  * This version of FedEx Tracker checks latest tracking status for tracking numbers
  * AUTHOR: Samuel Beguiristain
- * Version: 5
+ * Version: 6
 **/
 function trackPackages() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("FedEx Tracker");
-  var range = sheet.getRange("A2:A" + sheet.getLastRow()).getValues();
-  var trackingNumbers = range.flat();
+  var range = sheet.getRange("A2:B" + sheet.getLastRow()).getValues();
+  var trackingNumbers = range.map(function(row) { return row[0]; });
   var trackingDetails = [];
+  var deliveredCount = 0;
 
   // Validate the range contains at least one non-empty cell
   if (trackingNumbers.length === 0 || trackingNumbers.every(function(row) { return row === "" })) {
@@ -24,8 +25,10 @@ function trackPackages() {
 
   for (var i = 0; i < trackingNumbers.length; i++) {
     var trackingNumber = trackingNumbers[i];
-    if (!trackingNumber) {
-      continue; // skip loop if current cell is blank
+    var trackingStatus = range[i][1];
+    if (!trackingNumber || trackingStatus === "Delivered") {
+      deliveredCount++;
+      continue; // skip loop if current cell is blank or tracking status is "Delivered"
     }
     var payload = {
       "trackingInfo": [
@@ -65,21 +68,24 @@ function trackPackages() {
   }
 
   // Output the tracking numbers and details to the console for sanity check
-  console.log("Tracking Numbers:");
-  console.log(trackingNumbers);
-  console.log("Tracking Details:");
-  console.log(trackingDetails);
+  //console.log("Tracking Numbers:");
+  //console.log(trackingNumbers);
+  //console.log("Tracking Details:");
+  //console.log(trackingDetails);
 
   // Append the API response to the Logs sheet
   var logsSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Logs");
   logsSheet.appendRow([new Date(), "API Response", JSON.stringify(json)]);
+  logsSheet.appendRow([new Date(), "Total delivered: ", deliveredCount]);
+
 }
 
 
+
 function getFedExAccessToken() {
-  var clientId = "api_key"; // Go to FedEx Developer Portal to get this
-  var clientSecret = "secret_key"; // Go to FedEx Developer Portal to get this
-  var grantType = "client_credentials"; // Use lower level grant type
+  var clientId = "Get clientId from FedEx Developer Portal";
+  var clientSecret = "Get clientSecret from FedEx Developer Portal";
+  var grantType = "client_credentials";
   var tokenUrl = "https://apis.fedex.com/oauth/token";
   
   var payload = {
@@ -126,4 +132,11 @@ function getCarrierCode(trackingNumber) {
     default:
       return "FXG";
   }
+}
+
+function setRefreshTriggerFedEx() {
+  var scriptTrigger = ScriptApp.newTrigger("trackPackages")
+  .timeBased()
+  .everyHours(12)
+  .create();
 }
